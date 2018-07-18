@@ -8,12 +8,7 @@ import { DataService } from '../data.service';
 })
 export class ResourceComponent implements OnInit {
 
-  data        = {}
-  dataService = null
-
-  constructor(dataService: DataService) {
-    this.data = dataService.data
-    this.dataService = dataService
+  constructor(public dataService: DataService) {
   }
 
   ngOnInit() {

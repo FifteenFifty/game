@@ -1,0 +1,29 @@
+<h2>People</h2>
+<div>
+    <span>Total: {{dataService.data.people.total}}</span>
+</div>
+<div>
+    <span>Available: {{dataService.data.people.free}}</span>
+</div>
+<h3>Resources</h3>
+<div *ngFor="let key of dataService.data.resource | keys">
+    <span *ngIf="dataService.data.resource[key] > 0">
+        {{key | titlecase}}: {{dataService.data.resource[key]}}
+    </span>
+</div>
+<h3>Robots</h3>
+<div>
+    <span>Explorers: {{dataService.data.overmind.autoExplore.people.total}}</span>
+    <button (click)="dataService.assignPerson(dataService.data.people,
+                                              dataService.data.overmind.autoExplore.people, 1)"
+            [disabled]="dataService.data.people.free == 0">+</button>
+</div>
+<h3>Stats</h3>
+<div>
+    <strong>Explored</strong>
+</div>
+<div *ngFor="let key of dataService.data.stats.explored | keys">
+    <span *ngIf="dataService.data.stats.explored[key] > 0">
+        {{key}}: {{dataService.data.stats.explored[key]}}
+    </span>
+</div>

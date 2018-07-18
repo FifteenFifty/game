@@ -1,0 +1,40 @@
+<span>Wasteland (Total). {{dataService.data.explore.progress.max - dataService.data.explore.progress.current | number:'1.2-2'}}km unexplored</span>
+<ngb-progressbar [value]="dataService.data.explore.progress.current"
+                 [max]="dataService.data.explore.progress.max"
+                 Type="success">
+    <span>{{(dataService.data.explore.progress.current * 100) / dataService.data.explore.progress.max | number :'1.2-2'}}%</span>
+</ngb-progressbar>
+<div>
+    <span>Explorers: {{dataService.data.explore.resource.people.total | number:'1.2-2'}}</span>
+</div>
+<div>
+    <span>Explore speed: {{dataService.exploreSpeed(dataService.data.explore.resource.people.total) | number:'1.2-2'}}km/h</span>
+</div>
+<div>
+    <button (click)="dataService.assignPerson(dataService.data.people, dataService.data.explore.resource.people, 1)"
+            [disabled]="dataService.data.people.free == 0">+</button>
+    <button (click)="dataService.assignPerson(dataService.data.people, dataService.data.explore.resource.people, -1)"
+            [disabled]="dataService.data.explore.resource.people.total == 0">-</button>
+</div>
+<div class="row">
+    <div *ngFor="let area of dataService.data.explore.areas" class="col-md-2 col-lg-1 task">
+        <ngb-progressbar class="notransition"
+                         type="info"
+                         animate="false"
+                         [value]="area.durationSpent"
+                         [max]="area.duration">
+            <span>{{area.name | titlecase}}</span>
+        </ngb-progressbar>
+        <ngb-progressbar type="success"
+                         [value]="area.ticksSpent"
+                         [max]="area.ticks">
+            <span>Explored</span>
+        </ngb-progressbar>
+        <button class="plus"
+                (click)="dataService.assignPerson(dataService.data.people, area.people, 1)"
+                [disabled]="dataService.data.people.free == 0">+</button>
+        <button class="minus"
+                (click)="dataService.assignPerson(dataService.data.people, area.people, -1)"
+                [disabled]="area.people.total == 0">-</button>
+    </div>
+</div>
