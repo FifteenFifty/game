@@ -26,7 +26,6 @@ export class DataService {
     var keys = Object.keys(this.areas[tier])
     var toAdd = cloneDeep(this.areas[tier][keys[Math.floor(Math.random() *
                                                 keys.length)]])
-    console.log(toAdd)
 
     for (let r of Object.keys(toAdd.resource)) {
         toAdd.resource[r] = Math.ceil(Math.random() * toAdd.resource[r])
