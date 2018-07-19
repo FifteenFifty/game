@@ -6,14 +6,18 @@
     </div>
     <div class="col">
         <ngb-tabset>
+            <ngb-tab title="Story">
+                <ng-template ngbTabContent>
+                    <app-story></app-story>
+                </ng-template>
+            </ngb-tab>
             <ngb-tab title="Explore">
                 <ng-template ngbTabContent>
                     <app-explore></app-explore>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Scavenge">
-            rr
-                <div ng-include="'html/scavenge.html'"></div>
+            <ngb-tab title="Salvage">
+                <app-salvage></app-salvage>
             </ngb-tab>
         </ngb-tabset>
     </div>

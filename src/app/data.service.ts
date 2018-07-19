@@ -21,15 +21,39 @@ export class DataService {
     return Math.sqrt(people) * 2.5
   }
 
+  // Asumes that all weights add up to 100
+  public SelectWeightedKey = function(weightMap) {
+
+    var weight   = Math.floor(Math.random() * 100)
+    var toAddKey = ""
+
+    console.log(weight)
+
+    for (let k in weightMap) {
+        weight -= weightMap[k]
+        if (weight <= 0) {
+            toAddKey = k
+            break
+        }
+    }
+
+    return toAddKey
+  }
+
   addArea = function(tier) {
     // Select a random area from the tier to add
-    var keys = Object.keys(this.areas[tier])
-    var toAdd = cloneDeep(this.areas[tier][keys[Math.floor(Math.random() *
-                                                keys.length)]])
+    var toAddKey = this.SelectWeightedKey(this.areaMap[tier])
+    var toAdd = cloneDeep(this.areas[tier][toAddKey])
 
+    // Randomise resource
     for (let r of Object.keys(toAdd.resource)) {
         toAdd.resource[r] = Math.ceil(Math.random() * toAdd.resource[r])
     }
+
+    // Randomise duration/ticks (+/-0.5)
+    toAdd.duration += Math.ceil((Math.random() - 0.5) * toAdd.duration)
+    toAdd.ticks    += Math.ceil((Math.random() - 0.5) * toAdd.ticks)
+
     this.data.explore.areas.push(toAdd)
   }
 
@@ -78,7 +102,7 @@ export class DataService {
         }
     }
 
-    scavenge = {
+    salvage = {
         car: {
             name: "Car",
             resource: {
@@ -92,6 +116,15 @@ export class DataService {
         }
     }
 
+    // Each of the tier weights should add to 100
+    areaMap = {
+        1: {
+        garage: 90,
+        house:  10
+        }
+    }
+
+    // TODO - weighted chances of these happening
     areas = {
         1: {
             garage: {
