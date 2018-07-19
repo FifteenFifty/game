@@ -1,3 +1,5 @@
-<p>
-  salvage works!
-</p>
+<div class="row">
+    <div *ngFor="let object of dataService.data.salvage.objects" class="col-md-2 col-lg-1 task">
+        <p>There is a {{object.name}}</p>
+    </div>
+</div>

@@ -21,13 +21,11 @@ export class DataService {
     return Math.sqrt(people) * 2.5
   }
 
-  // Asumes that all weights add up to 100
+  // Assumes that all weights add up to 100
   public SelectWeightedKey = function(weightMap) {
 
-    var weight   = Math.floor(Math.random() * 100)
+    var weight   = Math.random() * 100
     var toAddKey = ""
-
-    console.log(weight)
 
     for (let k in weightMap) {
         weight -= weightMap[k]
@@ -57,6 +55,26 @@ export class DataService {
     this.data.explore.areas.push(toAdd)
   }
 
+  trySalvage = function(salvageMap) {
+    // Select a random area from the tier to add
+    var toAddKey = this.SelectWeightedKey(salvageMap)
+
+    if (toAddKey != "") {
+        var toAdd = cloneDeep(this.salvage[toAddKey])
+
+        // Randomise resource
+        for (let r of Object.keys(toAdd.resource)) {
+            toAdd.resource[r] = Math.ceil(Math.random() * toAdd.resource[r])
+        }
+
+        // Randomise duration/ticks (+/-0.5)
+        toAdd.duration += Math.ceil((Math.random() - 0.5) * toAdd.duration)
+        toAdd.ticks    += Math.ceil((Math.random() - 0.5) * toAdd.ticks)
+
+        this.data.salvage.objects.push(toAdd)
+    }
+  }
+
   /** Data */
   lastAreaKms = 0
   maxAreaKms  = 1
@@ -79,6 +97,15 @@ export class DataService {
             areas: [
             ]
         },
+        salvage: {
+            resource: {
+                people: {
+                    total: 0
+                }
+            },
+            objects: [
+            ]
+        },
         resource: {
             food:     100,
             water:    100,
@@ -91,8 +118,6 @@ export class DataService {
                     free:  0
                 }
             }
-        },
-        scavenge: {
         },
         stats: {
             explored: {
@@ -124,7 +149,6 @@ export class DataService {
         }
     }
 
-    // TODO - weighted chances of these happening
     areas = {
         1: {
             garage: {
@@ -134,8 +158,8 @@ export class DataService {
                     water:    10,
                     currency: 10
                 },
-                scavenge: {
-                    car: 0.15
+                salvage: {
+                    car: 99
                 },
                 duration:      5,
                 durationSpent: 0,

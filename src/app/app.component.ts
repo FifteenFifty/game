@@ -33,6 +33,8 @@ export class AppComponent implements OnInit {
                 dataService.data.resource.water    += area.resource.water
                 dataService.data.resource.currency += area.resource.currency
 
+                dataService.trySalvage(area.salvage)
+
                 if (area.ticksSpent > area.ticks) {
                     // Finished - remove all assigned people, robots, and
                     // the area
