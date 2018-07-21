@@ -91,14 +91,14 @@ export class DataService {
                 people: {
                     total:  0,
                     robots: 0
-                }
+                },
                 name: "Car",
                 count: 1,
                 resource: {
                     steel:     10,
                     circuitry: 1
                 },
-                baseDuration:  20
+                baseDuration:  20,
                 duration:      20,
                 durationSpent: 0,
             }
@@ -118,7 +118,7 @@ export class DataService {
                 }
             }
         },
-        recipes [
+        recipes: [
             {
                 name: "Explore-o bot",
                 people: {
@@ -128,9 +128,9 @@ export class DataService {
                 ingredients: {
                     steel:     1,
                     circuitry: 1
-                }
+                },
                 duration:      10,
-                durationSpent: 0
+                durationSpent: 0,
                 queued:        0,
                 job:           "autoExplore"
             }

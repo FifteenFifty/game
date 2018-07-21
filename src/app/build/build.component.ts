@@ -19,7 +19,7 @@ export class BuildComponent implements OnInit {
       recipe.queued++
 
       for (let k of Object.keys(recipe.ingredients)) {
-          dataService.data.resource[k] -= recipe.ingredients[k]
+          this.dataService.data.resource[k] -= recipe.ingredients[k]
       }
   }
 
@@ -27,7 +27,7 @@ export class BuildComponent implements OnInit {
       var ret = true
 
       for (let k of Object.keys(toCheck)) {
-          if (dataService.data.resource[k] < toCheck[k]) {
+          if (this.dataService.data.resource[k] < toCheck[k]) {
               ret = false
               break
           }
