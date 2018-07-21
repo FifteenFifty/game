@@ -5,20 +5,26 @@
         <app-resource></app-resource>
     </div>
     <div class="col">
-        <ngb-tabset>
-            <ngb-tab title="Story">
+        <ngb-tabset activeId="content-tab-2">
+            <ngb-tab id="content-tab-1" title="Story">
                 <ng-template ngbTabContent>
                     <app-story></app-story>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Explore">
+
+            <ngb-tab id="content-tab-2" title="Explore">
                 <ng-template ngbTabContent>
                     <app-explore></app-explore>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab title="Salvage">
+            <ngb-tab id="content-tab-3" title="Salvage">
                 <ng-template ngbTabContent>
                     <app-salvage></app-salvage>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab id="content-tab-4" title="Build">
+                <ng-template ngbTabContent>
+                    <app-build></app-build>
                 </ng-template>
             </ngb-tab>
         </ngb-tabset>

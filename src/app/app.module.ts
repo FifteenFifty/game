@@ -8,6 +8,8 @@ import { KeysPipe } from './keys.pipe';
 import { ExploreComponent } from './explore/explore.component';
 import { StoryComponent } from './story/story.component';
 import { SalvageComponent } from './salvage/salvage.component';
+import { BuildComponent } from './build/build.component';
+import { DurationPipe } from './duration.pipe';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { SalvageComponent } from './salvage/salvage.component';
     ExploreComponent,
     StoryComponent,
     SalvageComponent,
+    BuildComponent,
+    DurationPipe,
   ],
   imports: [
       BrowserModule,

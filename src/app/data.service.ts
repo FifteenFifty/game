@@ -60,18 +60,7 @@ export class DataService {
     var toAddKey = this.SelectWeightedKey(salvageMap)
 
     if (toAddKey != "") {
-        var toAdd = cloneDeep(this.salvage[toAddKey])
-
-        // Randomise resource
-        for (let r of Object.keys(toAdd.resource)) {
-            toAdd.resource[r] = Math.ceil(Math.random() * toAdd.resource[r])
-        }
-
-        // Randomise duration/ticks (+/-0.5)
-        toAdd.duration += Math.ceil((Math.random() - 0.5) * toAdd.duration)
-        toAdd.ticks    += Math.ceil((Math.random() - 0.5) * toAdd.ticks)
-
-        this.data.salvage.objects.push(toAdd)
+        this.data.salvage[toAddKey].count += 1
     }
   }
 
@@ -98,18 +87,28 @@ export class DataService {
             ]
         },
         salvage: {
-            resource: {
+            car: {
                 people: {
-                    total: 0
+                    total:  0,
+                    robots: 0
                 }
-            },
-            objects: [
-            ]
+                name: "Car",
+                count: 1,
+                resource: {
+                    steel:     10,
+                    circuitry: 1
+                },
+                baseDuration:  20
+                duration:      20,
+                durationSpent: 0,
+            }
         },
         resource: {
-            food:     100,
-            water:    100,
-            currency: 0
+            food:      100,
+            water:     100,
+            currency:  0,
+            steel:     0,
+            circuitry: 0
         },
         overmind: {
             autoExplore: {
@@ -119,25 +118,28 @@ export class DataService {
                 }
             }
         },
+        recipes [
+            {
+                name: "Explore-o bot",
+                people: {
+                    total:  0,
+                    robots: 0
+                },
+                ingredients: {
+                    steel:     1,
+                    circuitry: 1
+                }
+                duration:      10,
+                durationSpent: 0
+                queued:        0,
+                job:           "autoExplore"
+            }
+        ],
         stats: {
             explored: {
                 Garage: 0,
                 House:  0
             }
-        }
-    }
-
-    salvage = {
-        car: {
-            name: "Car",
-            resource: {
-                steel:     10,
-                circuitry: 1
-            },
-            duration:      20,
-            durationSpent: 0,
-            ticks:         20,
-            ticksSpent:    0
         }
     }
 

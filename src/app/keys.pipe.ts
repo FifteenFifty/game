@@ -8,5 +8,4 @@ export class KeysPipe implements PipeTransform {
   transform(value: any, args: any[] = null): any {
     return Object.keys(value);
   }
-
 }

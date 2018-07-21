@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
 
     dataService.lastAreaKms += moreExplored
 
+    // Explore
     dataService.data.explore.areas.forEach(
         function(area, index) {
             area.durationSpent += (area.people.total + area.people.robots) * tps
@@ -46,8 +47,57 @@ export class AppComponent implements OnInit {
             }
         });
 
-        //More people explore faster, with diminishing returns
-        dataService.data.explore.progress.current += moreExplored
+    //More people explore faster, with diminishing returns
+    dataService.data.explore.progress.current += moreExplored
+
+    // Salvage
+    Object.keys(dataService.data.salvage).forEach(
+        function(k, index) {
+            var obj = dataService.data.salvage[k]
+
+            if (obj.count > 0 && obj.people.total > 0) {
+                obj.durationSpent += (obj.people.total + obj.people.robots) * tps
+
+                if (obj.durationSpent > obj.duration) {
+                    obj.count--
+                    obj.durationSpent = 0
+                    obj.duration      = obj.baseDuration +
+                                        (obj.baseDuration * (Math.random() - 0.5))
+
+                    if (obj.count == 0) {
+                        dataService.data.people.free += obj.people.total
+                        obj.people.total              = 0
+                    }
+
+                    for (let k of Object.keys(obj.resource)) {
+                        dataService.data.resource[k] += obj.resource[k]
+                    }
+                }
+            }
+        });
+
+    // Build
+    dataService.data.recipes.forEach(
+        function(recipe, index) {
+
+            if (recipe.queued > 0 && recipe.people.total > 0) {
+                recipe.durationSpent += (recipe.people.total + recipe.people.robots) * tps
+
+                if (recipe.durationSpent > recipe.duration) {
+                    recipe.queued --
+                    recipe.durationSpent = 0
+
+                    dataService.data.overmind[recipe.job].people.free++
+                    dataService.data.overmind[recipe.job].people.total++
+
+                    // People aren't given back
+                    //if (recipe.queued == 0) {
+                    //    dataService.data.people.free += recipe.people.total
+                    //    recipe.people.total           = 0
+                    //}
+                }
+            }
+        });
   };
 
   EventTrigger(dataService) {

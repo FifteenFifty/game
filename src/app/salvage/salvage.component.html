@@ -1,5 +1,18 @@
+<p>Salvage stuff you've found</p>
 <div class="row">
-    <div *ngFor="let object of dataService.data.salvage.objects" class="col-md-2 col-lg-1 task">
-        <p>There is a {{object.name}}</p>
+    <div *ngFor="let obj of dataService.data.salvage | keys" class="col-md-2 col-lg-1 task">
+        <div class="salvage"
+             *ngIf="dataService.data.salvage[obj].count > 0">
+            <ngb-progressbar class="notransition"
+                             type="success"
+                             [value]="dataService.data.salvage[obj].durationSpent"
+                             [max]="dataService.data.salvage[obj].duration">
+                <span>{{dataService.data.salvage[obj].name}} ({{dataService.data.salvage[obj].count}})</span>
+            </ngb-progressbar>
+            <button class="plus"
+                    (click)="dataService.assignPerson(dataService.data.people,
+                             dataService.data.salvage[obj].people, 1)"
+                    [disabled]="dataService.data.people.free == 0">+</button>
+        </div>
     </div>
 </div>
