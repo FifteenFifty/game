@@ -7,9 +7,11 @@ import { DataService } from './data.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title       = 'Angular App Test';
+  title          = 'Angular App Test';
+  timeSinceSave = 0
 
   constructor(private dataService: DataService) {
+    this.Load(dataService)
   }
 
   UiUpdate(dataService) {
@@ -30,9 +32,9 @@ export class AppComponent implements OnInit {
           area.durationSpent = 0
           area.ticksSpent += 1
 
-          dataService.data.resource.food     += area.resource.food
-          dataService.data.resource.water    += area.resource.water
-          dataService.data.resource.currency += area.resource.currency
+          for (let k of Object.keys(area.resource)) {
+            dataService.data.resource[k] += area.resource[k]
+          }
 
           dataService.trySalvage(area.salvage)
 
@@ -41,7 +43,7 @@ export class AppComponent implements OnInit {
             // the area
             dataService.data.people.free                      +=
                                                           area.people.total
-            dataService.data.overmind.autoExplore.people.free +=
+            dataService.data.overmind.explore.people.free +=
                                                           area.people.robots
             dataService.data.explore.areas.splice(index, 1)
             dataService.data.stats.explored[area.name]++
@@ -57,7 +59,9 @@ export class AppComponent implements OnInit {
       function(k, index) {
         var obj = dataService.data.salvage[k]
 
-        if (obj.count > 0 && obj.people.total > 0) {
+        if (obj.count > 0 &&
+            (obj.people.total > 0 ||
+             obj.people.robots > 0)) {
           obj.durationSpent += (obj.people.total + obj.people.robots) * tps
 
           if (obj.durationSpent > obj.duration) {
@@ -67,13 +71,18 @@ export class AppComponent implements OnInit {
               (obj.baseDuration * (Math.random() - 0.5))
 
             if (obj.count == 0) {
-              dataService.data.people.free += obj.people.total
-              obj.people.total              = 0
+              dataService.data.people.free                  +=
+                obj.people.total
+              dataService.data.overmind.salvage.people.free +=
+                obj.people.robots
+              obj.people.total                        = 0
             }
 
             for (let k of Object.keys(obj.resource)) {
               dataService.data.resource[k] += obj.resource[k]
             }
+
+            dataService.data.stats.salvaged[k]++
           }
         }
       });
@@ -82,9 +91,8 @@ export class AppComponent implements OnInit {
     dataService.data.recipes.forEach(
       function(recipe, index) {
 
-        if (recipe.queued > 0 && recipe.people.total > 0) {
-          recipe.durationSpent += (recipe.people.total +
-                                   recipe.people.robots) * tps
+        if (recipe.queued > 0) {
+          recipe.durationSpent += 1 * tps
 
           if (recipe.durationSpent > recipe.duration) {
             recipe.queued --
@@ -111,23 +119,50 @@ export class AppComponent implements OnInit {
     }
 
     // If there are free exploring robots, assign them
-    var unexplored = dataService.data.explore.areas.some(
-      function(area) {
-        return (area.people.total + area.people.robots) == 0;
-      });
+    var unexploredOnly = dataService.data.explore.new > 0
 
     dataService.data.explore.areas.some(
       function(area) {
         /** If we're only assigning to unexplored, then skip in progress
          * areas */
-        if (unexplored == ((area.people.total + area.people.robots) == 0) &&
-            dataService.data.overmind.autoExplore.people.free > 0) {
+        var beingExplored = (area.people.total + area.people.robots) > 0
+        if (unexploredOnly == !beingExplored &&
+            dataService.data.overmind.explore.people.free > 0) {
 
           area.people.robots++
-          dataService.data.overmind.autoExplore.people.free--
+          dataService.data.overmind.explore.people.free--
+
+          if (unexploredOnly) {
+            dataService.data.explore.new--
+          }
         }
 
-        return dataService.data.overmind.autoExplore.people.free == 0
+        return dataService.data.overmind.explore.people.free == 0
+      });
+
+    // If there are free salvage robots, assign them
+    // TODO - optimise this
+    var unsalvagedOnly = Object.keys(dataService.data.salvage).some(
+      function(k) {
+        return (dataService.data.salvage[k].people.total +
+                dataService.data.salvage[k].people.robots) == 0;
+      });
+
+    Object.keys(dataService.data.salvage).some(
+      function(k) {
+        /** If we're only assigning to unsalvaged, then skip in progress
+         * areas */
+        var beingSalvaged = (dataService.data.salvage[k].people.total +
+                             dataService.data.salvage[k].people.robots) > 0;
+
+        if (unsalvagedOnly == !beingSalvaged &&
+            dataService.data.overmind.salvage.people.free > 0) {
+
+          dataService.data.salvage[k].people.robots++
+          dataService.data.overmind.salvage.people.free--
+        }
+
+        return dataService.data.overmind.salvage.people.free == 0
       });
 
     var workers = dataService.data.people.total -
@@ -135,11 +170,25 @@ export class AppComponent implements OnInit {
 
     dataService.data.resource.food  -= workers
     dataService.data.resource.water -= workers
+    dataService.timeSinceSave++
   };
 
+  Save(dataService) {
+    localStorage.setItem("data", JSON.stringify(dataService.data))
+    dataService.timeSinceSave = 0
+  }
+
+  Load(dataService) {
+    var jsonData = localStorage.getItem("data")
+
+    if (jsonData) {
+      dataService.data = JSON.parse(jsonData)
+    }
+  }
 
   ngOnInit() {
     setInterval(this.UiUpdate, 10, this.dataService);
     setInterval(this.EventTrigger, 1000, this.dataService);
+    setInterval(this.Save, 10000, this.dataService);
   }
 }

@@ -1,7 +1,12 @@
 <p>
-  Now that you've found stuff, and salvaged other stuff,
-  why not build stuff?
+This machine looks very out of place in the basement of a dilapidated
+factory. It's far too modern, and there's not a speck of dust on it. It's
+emitting a low hum.
+<br />
+Upon closer inspection, you notice a cartridge slot. Now if there was only
+something to put in it...
 </p>
+
 <h3>Recipes</h3>
 <div class="row">
   <div *ngFor="let recipe of dataService.data.recipes" class="col-md-4">
@@ -17,28 +22,12 @@
       <li>Time: {{recipe.duration | duration}}</li>
     </ul>
 
-    <ngb-progressbar *ngIf="recipe.queued > 0"
-                     class="notransition"
+    <ngb-progressbar class="notransition"
                      type="success"
                      [value]="recipe.durationSpent"
                      [max]="recipe.duration">
       <span>Building ({{recipe.queued}})</span>
     </ngb-progressbar>
-    <span>Assigned people: {{recipe.people.total}}</span>
-    <div>
-      <button (click)="dataService.assignPerson(dataService.data.people,
-                                                recipe.people,
-                                                1)"
-              [disabled]="dataService.data.people.free == 0">
-        + Person
-      </button>
-      <button (click)="dataService.assignPerson(dataService.data.people,
-                                                recipe.people,
-                                                -1)"
-              [disabled]="recipe.people.total == 0">
-        - Person
-      </button>
-    </div>
     <div>
       <button (click)="queue(recipe)"
               [disabled]="!haveResources(recipe.ingredients)">

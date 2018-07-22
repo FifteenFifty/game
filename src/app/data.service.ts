@@ -52,6 +52,7 @@ export class DataService {
     toAdd.duration += Math.ceil((Math.random() - 0.5) * toAdd.duration)
     toAdd.ticks    += Math.ceil((Math.random() - 0.5) * toAdd.ticks)
 
+    this.data.explore.new++
     this.data.explore.areas.push(toAdd)
   }
 
@@ -83,6 +84,7 @@ export class DataService {
         current: 0,
         max:     242495
       },
+      new: 0,
       areas: [
       ]
     },
@@ -111,7 +113,13 @@ export class DataService {
       circuitry: 0
     },
     overmind: {
-      autoExplore: {
+      explore: {
+        people: {
+          total: 0,
+          free:  0
+        }
+      },
+      salvage: {
         people: {
           total: 0,
           free:  0
@@ -120,11 +128,7 @@ export class DataService {
     },
     recipes: [
       {
-        name: "Explore-o bot",
-        people: {
-          total:  0,
-          robots: 0
-        },
+        name: "Explor-o-bot",
         ingredients: {
           steel:     1,
           circuitry: 1
@@ -132,13 +136,27 @@ export class DataService {
         duration:      10,
         durationSpent: 0,
         queued:        0,
-        job:           "autoExplore"
+        job:           "explore"
+      },
+      {
+        name: "Salvage-bot",
+        ingredients: {
+          steel:     1,
+          circuitry: 1
+        },
+        duration:      10,
+        durationSpent: 0,
+        queued:        0,
+        job:           "salvage"
       }
     ],
     stats: {
       explored: {
         Garage: 0,
         House:  0
+      },
+      salvaged: {
+        car: 0
       }
     }
   }
@@ -190,4 +208,6 @@ export class DataService {
       }
     }
   }
+
+  timeSinceSave = 0
 }

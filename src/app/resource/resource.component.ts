@@ -14,4 +14,8 @@ export class ResourceComponent implements OnInit {
   ngOnInit() {
   }
 
+  resetSave = function() {
+    localStorage.removeItem("data")
+  }
+
 }

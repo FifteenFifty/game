@@ -23,8 +23,6 @@ export class DurationPipe implements PipeTransform {
                + (minutes > 1 ? " minutes" : " minute")
     }
 
-    console.log(toReturn)
-
     toReturn += (toReturn ? ", " : "")
              + seconds
              + (seconds > 1 ? " seconds" : " second")
