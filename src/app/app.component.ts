@@ -47,6 +47,15 @@ export class AppComponent implements OnInit {
                                                           area.people.robots
             dataService.data.explore.areas.splice(index, 1)
             dataService.data.stats.explored[area.name]++
+
+            if (area.recipes) {
+              for (var i = 0; i < area.recipes.length; ++i) {
+                var r = area.recipes[i];
+                area.recipes.splice(i, 1);
+                dataService.data.recipes.push(r);
+                i--;
+              }
+            }
           }
         }
       });
@@ -117,6 +126,8 @@ export class AppComponent implements OnInit {
       dataService.addArea(1)
       dataService.lastAreaKms = 0
     }
+
+    dataService.addFixedEvent()
 
     // If there are free exploring robots, assign them
     var unexploredOnly = dataService.data.explore.new > 0

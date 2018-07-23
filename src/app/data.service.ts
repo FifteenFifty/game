@@ -65,6 +65,24 @@ export class DataService {
     }
   }
 
+  addFixedEvent = function() {
+    // See if we meet the criteria for the next fixed event
+    if (this.data.fixedEvents.length > 0) {
+      for (let c of this.data.fixedEvents[0].criteria) {
+        var keys = c.criterion.split(".")
+        var d = this.data
+        for (let k of keys) {
+          d = d[k]
+        console.log(d)
+        }
+        if (d > c.value) {
+          //TODO we only do areas at the moment
+          this.data.explore.areas.push(this.data.fixedEvents.shift())
+        }
+      }
+    }
+  }
+
   /** Data */
   lastAreaKms = 0
   maxAreaKms  = 1
@@ -127,27 +145,56 @@ export class DataService {
       }
     },
     recipes: [
+    ],
+    fixedEvents: [
       {
-        name: "Explor-o-bot",
-        ingredients: {
-          steel:     1,
-          circuitry: 1
+        name:     "Factory",
+        resource: {
+          food:     100,
+          water:    100,
+          currency: 100
         },
-        duration:      10,
-        durationSpent: 0,
-        queued:        0,
-        job:           "explore"
-      },
-      {
-        name: "Salvage-bot",
-        ingredients: {
-          steel:     1,
-          circuitry: 1
+        salvage: {
+          car: 99
         },
-        duration:      10,
+        recipes: [
+          {
+            name: "Explor-o-bot",
+            ingredients: {
+              steel:     1,
+              circuitry: 1
+            },
+            duration:      10,
+            durationSpent: 0,
+            queued:        0,
+            job:           "explore"
+          },
+          {
+            name: "Salvage-bot",
+            ingredients: {
+              steel:     1,
+              circuitry: 1
+            },
+            duration:      10,
+            durationSpent: 0,
+            queued:        0,
+            job:           "salvage"
+          }
+        ],
+        duration:      50,
         durationSpent: 0,
-        queued:        0,
-        job:           "salvage"
+        ticks:         1,
+        ticksSpent:    0,
+        people:        {
+          total:  0,
+          robots: 0
+        },
+        criteria: [
+          {
+            criterion: "stats.explored.Garage",
+            value:     0
+          }
+        ]
       }
     ],
     stats: {
