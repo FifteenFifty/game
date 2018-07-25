@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   title          = 'Angular App Test';
   timeSinceSave = 0
 
-  constructor(private dataService: DataService) {
+  constructor(public dataService: DataService) {
     this.Load(dataService)
   }
 

@@ -9,6 +9,8 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 })
 export class ExploreComponent implements OnInit {
 
+  loot = { recipes: [] }
+
   constructor(public  dataService:  DataService,
               private modalService: NgbModal) {
   }
