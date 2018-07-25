@@ -26,35 +26,35 @@ export class AppComponent implements OnInit {
     // Explore
     dataService.data.explore.areas.forEach(
       function(area, index) {
-        area.durationSpent += (area.people.total + area.people.robots) * tps
+
+        if (area.durationSpent <= area.duration) {
+          area.durationSpent += (area.people.total + area.people.robots) *
+                                tps
+        }
 
         if (area.durationSpent > area.duration) {
-          area.durationSpent = 0
-          area.ticksSpent += 1
+          if (area.ticksSpent < area.ticks) {
+            area.durationSpent = 0
+            area.ticksSpent += 1
 
-          for (let k of Object.keys(area.resource)) {
-            dataService.data.resource[k] += area.resource[k]
-          }
+            for (let k of Object.keys(area.resource)) {
+              dataService.data.resource[k] += area.resource[k]
+            }
 
-          dataService.trySalvage(area.salvage)
-
-          if (area.ticksSpent > area.ticks) {
-            // Finished - remove all assigned people, robots, and
-            // the area
-            dataService.data.people.free                      +=
+            dataService.trySalvage(area.salvage)
+          } else {
+            if (!area.recipes || area.recipes.length == 0) {
+              // Finished - remove all assigned people, robots, and
+              // the area
+              dataService.data.people.free                      +=
                                                           area.people.total
-            dataService.data.overmind.explore.people.free +=
+              dataService.data.overmind.explore.people.free +=
                                                           area.people.robots
-            dataService.data.explore.areas.splice(index, 1)
-            dataService.data.stats.explored[area.name]++
-
-            if (area.recipes) {
-              for (var i = 0; i < area.recipes.length; ++i) {
-                var r = area.recipes[i];
-                area.recipes.splice(i, 1);
-                dataService.data.recipes.push(r);
-                i--;
-              }
+              dataService.data.explore.areas.splice(index, 1)
+              dataService.data.stats.explored[area.name]++
+            } else {
+              // The area is lootable, and will continue to show up until
+              // looted
             }
           }
         }

@@ -2,7 +2,7 @@
 Explore the wasteland
 </p>
 <span>
-  Wasteland (Total). 
+  Wasteland (Total).
   {{dataService.data.explore.progress.max -
     dataService.data.explore.progress.current | number:'1.2-2'}}km
     unexplored
@@ -32,6 +32,7 @@ Explore the wasteland
                                           .total) | number:'1.2-2'}}km/h
   </span>
 </div>
+
 <div>
   <button (click)="dataService.assignPerson(
                                   dataService.data.people,
@@ -79,5 +80,63 @@ Explore the wasteland
             [disabled]="area.people.total == 0">
       -
     </button>
+    <div *ngIf="area.ticksSpent >= area.ticks &&
+                area.durationSpent > area.duration">
+      <button class="btn-primary"
+              (click)="open(lootModal, area)">
+        Loot
+      </button>
+    </div>
   </div>
 </div>
+
+<ng-template #lootModal let-c="close">
+  <div class="modal-header">
+    <h4 class="modal-title" id="loot-modal">Loot</h4>
+    <button type="button"
+            class="close"
+            aria-label="Close" (click)="c()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p *ngIf="dataService.data.recipes.length == 0">
+      You find a secret hatch in the floor of the factory that leads to a
+      basement. Something seems peculiar about it, but you can't place the
+      feeling of unease.
+      <br />
+      You descend. Why not?
+      <br />
+      There's literally nothing here... Apart from a massive machine in the
+      center of the room that you didn't notice at first.
+      <br />
+      Lying next to the machine is a cartridge. You pick it up, flip it over
+      and read:
+    </p>
+    <p *ngIf="dataService.data.recipes.length > 0">
+    You find a cartridge... How exciting! A label on the back reads:
+    </p>
+    <div *ngFor="let recipe of loot.recipes">
+      <p>
+        <strong>{{recipe.name}}</strong>
+        <br />
+        Requires:
+      </p>
+      <ul>
+        <li *ngFor="let k of recipe.ingredients | keys">
+          {{k | titlecase}}: {{recipe.ingredients[k]}}
+        </li>
+        <li>Time: {{recipe.duration | duration}}</li>
+      </ul>
+    </div>
+    <p *ngIf="dataService.data.recipes.length == 0">
+      Hey, that sounds pretty useful! Maybe you can use it to **Build**
+      something.
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button"
+            class="btn btn-outline-dark"
+            (click)="c()">Cool!</button>
+  </div>
+</ng-template>

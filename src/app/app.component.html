@@ -22,7 +22,9 @@
                     <app-salvage></app-salvage>
                 </ng-template>
             </ngb-tab>
-            <ngb-tab id="content-tab-4" title="Build">
+            <ngb-tab id="content-tab-4"
+                     title="Build"
+                     *ngIf="dataService.data.recipes.length > 0">
                 <ng-template ngbTabContent>
                     <app-build></app-build>
                 </ng-template>

@@ -38,6 +38,18 @@ export class DataService {
     return toAddKey
   }
 
+  claimLoot = function (lootable) {
+    console.log("looting")
+    if (lootable.recipes) {
+      for (var i = 0; i < lootable.recipes.length; ++i) {
+        var r = lootable.recipes[i];
+        lootable.recipes.splice(i, 1);
+        this.data.recipes.push(r);
+        i--;
+      }
+    }
+  }
+
   addArea = function(tier) {
     // Select a random area from the tier to add
     var toAddKey = this.SelectWeightedKey(this.areaMap[tier])
@@ -73,7 +85,6 @@ export class DataService {
         var d = this.data
         for (let k of keys) {
           d = d[k]
-        console.log(d)
         }
         if (d > c.value) {
           //TODO we only do areas at the moment

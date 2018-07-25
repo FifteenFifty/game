@@ -11,9 +11,9 @@ something to put in it...
 <div class="row">
   <div *ngFor="let recipe of dataService.data.recipes" class="col-md-4">
     <p>
-    <strong>{{recipe.name}}</strong>
-    <br />
-    Requires:
+      <strong>{{recipe.name}}</strong>
+      <br />
+      Requires:
     </p>
     <ul>
       <li *ngFor="let k of recipe.ingredients | keys">
