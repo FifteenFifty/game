@@ -51,7 +51,14 @@ export class AppComponent implements OnInit {
               dataService.data.overmind.explore.people.free +=
                                                           area.people.robots
               dataService.data.explore.areas.splice(index, 1)
-              dataService.data.stats.explored[area.name]++
+              if (area.name in dataService.data.stats.explored) {
+                console.log("It exists")
+                dataService.data.stats.explored[area.name]++
+              } else {
+                console.log("It does not exist")
+                console.log(dataService.data.stats.explored)
+                dataService.data.stats.explored[area.name] = 1
+              }
             } else {
               // The area is lootable, and will continue to show up until
               // looted
@@ -91,7 +98,11 @@ export class AppComponent implements OnInit {
               dataService.data.resource[k] += obj.resource[k]
             }
 
-            dataService.data.stats.salvaged[k]++
+            if (k in dataService.data.stats.salvaged) {
+              dataService.data.stats.salvaged[k]++
+            } else {
+              dataService.data.stats.salvaged[k] = 1
+            }
           }
         }
       });

@@ -100,20 +100,7 @@ Explore the wasteland
     </button>
   </div>
   <div class="modal-body">
-    <p *ngIf="dataService.data.recipes.length == 0">
-      You find a secret hatch in the floor of the factory that leads to a
-      basement. Something seems peculiar about it, but you can't place the
-      feeling of unease.
-      <br />
-      You descend. Why not?
-      <br />
-      There's literally nothing here... Apart from a massive machine in the
-      center of the room that you didn't notice at first.
-      <br />
-      Lying next to the machine is a cartridge. You pick it up, flip it over
-      and read:
-    </p>
-    <p *ngIf="dataService.data.recipes.length > 0">
+    <p>
     You find a cartridge... How exciting! A label on the back reads:
     </p>
     <div *ngFor="let recipe of loot.recipes">

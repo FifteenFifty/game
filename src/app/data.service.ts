@@ -39,7 +39,6 @@ export class DataService {
   }
 
   claimLoot = function (lootable) {
-    console.log("looting")
     if (lootable.recipes) {
       for (var i = 0; i < lootable.recipes.length; ++i) {
         var r = lootable.recipes[i];
@@ -47,6 +46,15 @@ export class DataService {
         this.data.recipes.push(r);
         i--;
       }
+    }
+    if (lootable.story) {
+      for (var i = 0; i < lootable.story.length; ++i) {
+        var r = lootable.story[i];
+        lootable.story.splice(i, 1);
+        this.data.story.lines.push(r);
+        i--;
+      }
+      this.data.story.new = true
     }
   }
 
@@ -192,6 +200,14 @@ export class DataService {
             job:           "salvage"
           }
         ],
+        story: [
+          "You find a secret hatch in the floor of the factory that leads to\
+           a basement. Something seems peculiar about it, but you can't\
+           place the feeling of unease",
+          "You descend. Why not?",
+          "There's literally nothing here... Apart from a massive machine in\
+           the center of the room that you didn't notice at first."
+        ],
         duration:      50,
         durationSpent: 0,
         ticks:         1,
@@ -210,12 +226,22 @@ export class DataService {
     ],
     stats: {
       explored: {
-        Garage: 0,
-        House:  0
       },
       salvaged: {
-        car: 0
       }
+    },
+    story: {
+      lines: [
+      "You awaken lying on the street.",
+      "Last thing you remember are the bombs falling. Fire and noise.",
+      "You get up. Looks like your legs still work. That's good. You also\
+       have a little food and water, but not enough to last. Some more\
+       certainlywouldn't hurt.",
+      "Everything around you looks exhausted, and you have no idea where you\
+       are.",
+      "Oh well, better start exploring."
+      ],
+      new: false
     }
   }
 
